@@ -34,6 +34,18 @@ gcloud builds --project YOUR_PROJECT_NAME \
     submit --tag gcr.io/YOUR_PROJECT_NAME/loanml:v1 .
 ```
 
+Deploy to Flask app to the kubernetes cluster using the following command:
+
+```
+kubectl apply -f app.yaml
+```
+
+Expose the port using the following command:
+
+```
+kubectl expose deployment flask-app-tutorial \
+    --type=LoadBalancer --port 80 --target-port 8080
+```
 # Deploy to Google Kubernetes Engine
 ## First of all, make sure you have access to the Kubernetes cluster. 
 ## To deploy to Kubernetes, create new deployment configuration called app.yaml and add the following:
