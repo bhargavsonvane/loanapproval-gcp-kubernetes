@@ -34,18 +34,8 @@ gcloud builds --project YOUR_PROJECT_NAME \
     submit --tag gcr.io/YOUR_PROJECT_NAME/loanml:v1 .
 ```
 
-Deploy to Flask app to the kubernetes cluster using the following command:
 
-```
-kubectl apply -f app.yaml
-```
 
-Expose the port using the following command:
-
-```
-kubectl expose deployment flask-app-tutorial \
-    --type=LoadBalancer --port 80 --target-port 8080
-```
 # Deploy to Google Kubernetes Engine
 ## First of all, make sure you have access to the Kubernetes cluster. 
 ## To deploy to Kubernetes, create new deployment configuration called app.yaml and add the following:
@@ -81,3 +71,47 @@ spec:
             - name: DEBUG_MODE
               value: "1"
 ```
+Deploy to Flask app to the kubernetes cluster using the following command:
+
+```
+kubectl apply -f app.yaml
+```
+
+Expose the port using the following command:
+
+```
+kubectl expose deployment loan-approval-predictor \
+    --type=LoadBalancer --port 80 --target-port 8080
+```
+
+You an get the deployed Flask app URL using the following command:
+
+```
+kubectl get services -l name=loan-approval-predictor
+```
+You will get the internal and external IP. If you want to access the Flask app outside kubernetes cluster you can use the external IP.
+The next step is to enable auto-scaling using the following command:
+
+```
+kubectl scale deployment loan-approval-predictor --replicas=NUMBER
+kubectl autoscale deployment loan-approval-predictor \
+    --min=NUMBER --max=NUMBER \
+    --cpu-ratio=FLOAT --replicas=NUMBER
+```
+If you want to re-deploy, you need to build the new image then run the following command:
+
+```
+kubectl set image deployment/flask-app-tutorial \
+    flask-app-tutorial=NEW_IMAGE_TAG
+```
+Done.
+- Input
+<p align="center">
+<img src="loan-approval-predictor.herokuapp.com_.png" />
+</p>
+
+
+- Output
+<p align="center">
+<img src="loan-approval-predictor.herokuapp.com_predict.png" />
+</p>
