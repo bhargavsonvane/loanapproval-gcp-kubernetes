@@ -31,7 +31,7 @@ CMD ["gunicorn", "app:app", "--config=config.py"]
 Build the docker image on Google Cloud Platform, using the following command:
 ```
 gcloud builds --project YOUR_PROJECT_NAME \
-    submit --tag gcr.io/YOUR_PROJECT_NAME/flask-app:v1 .
+    submit --tag gcr.io/YOUR_PROJECT_NAME/loanml:v1 .
 ```
 
 # Deploy to Google Kubernetes Engine
@@ -41,23 +41,23 @@ gcloud builds --project YOUR_PROJECT_NAME \
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: flask-app-tutorial
+  name: loan-approval-predictor
   labels:
-    name: flask-app-tutorial
+    name: loan-approval-predictor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: flask-app-tutorial
+      name: loan-approval-predictor
   template:
     metadata:
-      name: flask-app-tutorial
+      name: loan-approval-predictor
       labels:
-        name: flask-app-tutorial
+        name: loan-approval-predictor
     spec:
       containers:
-        - name: flask-app-tutorial
-          image: gcr.io/kumparan-data-staging/flask-app:v1
+        - name: loan-approval-predictor
+          image: gcr.io/bhargavsonvane/loanml:v1
           ports:
             - containerPort: 8080
           resources:
